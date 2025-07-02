@@ -48,7 +48,10 @@ public class FilesystemPomReaderAdapter implements PomReaderPort {
                     String depArtifact = getTagValue(el, "artifactId");
                     String depVersion = getTagValue(el, "version");
                     if (depGroup != null && depArtifact != null && depVersion != null) {
-                        dependencies.add(new Dependency(depGroup + "." + depArtifact, depVersion));
+                        String depId = depGroup + "." + depArtifact;                        
+                        if (depId.contains("sensedia")) {
+                            dependencies.add(new Dependency(depId, depVersion));
+                        }
                     }
                 }
             }

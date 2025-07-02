@@ -18,17 +18,19 @@ public class HtmlGraphExporterAdapter implements GraphExporterPort<String> {
         html.append("  <title>Dependency Graph</title>\n");
         html.append("  <script src=\"https://d3js.org/d3.v7.min.js\"></script>\n");
         html.append("  <style>\n");
+        html.append("    html, body { margin: 0; padding: 0; height: 100%; }\n");
+        html.append("    svg { width: 100%; height: 100%; display: block; }\n");
         html.append("    .link { stroke: #999; stroke-opacity: 0.6; }\n");
         html.append("    .node text { pointer-events: none; font-size: 10px; }\n");
         html.append("    circle { fill: #1f77b4; }\n");
         html.append("  </style>\n</head>\n<body>\n");
-        html.append("<svg width=\"960\" height=\"600\"></svg>\n<script>\n");
+        html.append("<svg></svg>\n<script>\n");
 
         html.append("const graph = {\n  nodes: [\n");
         int i = 0;
         for (Dependency d : nodes) {
-            html.append(String.format("    { id: \"%s:%s\" }%s\n",
-                    d.getName(), d.getVersion(), ++i < nodes.size() ? "," : ""));
+            html.append(String.format("    { id: \"%s\" }%s\n",
+                    d.getName(), ++i < nodes.size() ? "," : ""));
         }
 
         html.append("  ],\n  links: [\n");
@@ -43,12 +45,12 @@ public class HtmlGraphExporterAdapter implements GraphExporterPort<String> {
 
         html.append("""
             const svg = d3.select("svg");
-            const width = +svg.attr("width");
-            const height = +svg.attr("height");
+            const width = window.innerWidth;
+            const height = window.innerHeight;
 
             const simulation = d3.forceSimulation(graph.nodes)
               .force("link", d3.forceLink(graph.links).id(d => d.id))
-              .force("charge", d3.forceManyBody())
+              .force("charge", d3.forceManyBody().strength(-800))
               .force("center", d3.forceCenter(width / 2, height / 2));
 
             const link = svg.append("g")
