@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 import java.util.ArrayList;
@@ -23,14 +24,14 @@ public class ReadDependencyService implements ReadDependencyUseCase {
     }
 
     @Override
-    public List<ProjectWithDependencies> readDependencies(String rootPath) {
+    public List<ProjectWithDependencies> readDependencies(String rootPath, Optional<String> regexString) {
         Set<ProjectWithDependencies> allDependencies = new HashSet<>();
         
-        try (Stream<Path> paths = Files.walk(Paths.get(rootPath))) {
+        try (Stream<Path> paths = Files.walk(Paths.get(rootPath), 4)) {
             paths
                 .filter(p -> p.getFileName().toString().equals("pom.xml"))
                 .forEach(pom -> {
-                    ProjectWithDependencies projectWithDependencies = pomReader.readProject(pom);
+                    ProjectWithDependencies projectWithDependencies = pomReader.readProject(pom, regexString);
 
                     allDependencies.add(projectWithDependencies);
                 });

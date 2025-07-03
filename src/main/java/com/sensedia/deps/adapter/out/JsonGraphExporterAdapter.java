@@ -3,6 +3,7 @@ package com.sensedia.deps.adapter.out;
 import java.util.Set;
 
 import com.sensedia.deps.domain.model.Dependency;
+import com.sensedia.deps.domain.model.ExportFormat;
 import com.sensedia.deps.domain.model.Relation;
 import com.sensedia.deps.domain.port.out.GraphExporterPort;
 
@@ -33,5 +34,10 @@ public class JsonGraphExporterAdapter implements GraphExporterPort<String> {
 
         sb.append("  ]\n}");
         return sb.toString();
+    }
+
+    @Override
+    public ExportFormat exportType() {
+        return ExportFormat.JSON;
     }
 }

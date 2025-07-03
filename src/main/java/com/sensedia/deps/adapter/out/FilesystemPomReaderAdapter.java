@@ -3,6 +3,7 @@ package com.sensedia.deps.adapter.out;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -15,7 +16,7 @@ import com.sensedia.deps.domain.port.out.PomReaderPort;
 public class FilesystemPomReaderAdapter implements PomReaderPort {
 
     @Override
-    public ProjectWithDependencies readProject(Path pomPath) {
+    public ProjectWithDependencies readProject(Path pomPath, Optional<String> filterSubstring) {
         Dependency project = null;
         List<Dependency> dependencies = new ArrayList<>();
 
@@ -48,10 +49,11 @@ public class FilesystemPomReaderAdapter implements PomReaderPort {
                     String depArtifact = getTagValue(el, "artifactId");
                     String depVersion = getTagValue(el, "version");
                     if (depGroup != null && depArtifact != null && depVersion != null) {
-                        String depId = depGroup + "." + depArtifact;                        
-                        if (depId.contains("sensedia")) {
-                            dependencies.add(new Dependency(depId, depVersion));
+                        String depId = depGroup + "." + depArtifact;
+                        if (filterSubstring.isPresent() && !depId.contains(filterSubstring.get())) {
+                            continue;
                         }
+                        dependencies.add(new Dependency(depId, depVersion));
                     }
                 }
             }
