@@ -4,6 +4,7 @@
 </div>
 
 <p align="center">
+<br>
   <a href="#sobre">Sobre</a> •
   <a href="#por-que-usar-o-tree">Por que</a> •
   <a href="#funcionalidades">Funcionalidades</a> •
@@ -26,9 +27,9 @@
 
 Em projetos com múltiplos módulos interdependentes, qualquer alteração pode impactar diretamente outras partes da aplicação. Entender essas relações é essencial para:
 
-- 🔍 **Antecipar impactos** antes de uma alteração ser feita  
-- 🛡️ **Mitigar riscos** de quebras inesperadas em outros módulos  
-- 📊 **Visualizar a arquitetura** de dependências de forma clara e navegável  
+- 🔍 **Antecipar impactos** antes de uma alteração ser feita
+- 🛡️ **Mitigar riscos** de quebras inesperadas em outros módulos
+- 📊 **Visualizar a arquitetura** de dependências de forma clara e navegável
 
 Com o **Tree**, você tem uma visão abrangente do seu ecossistema Maven — facilitando decisões técnicas mais seguras e estratégicas.
 
@@ -51,3 +52,4 @@ Com o **Tree**, você tem uma visão abrangente do seu ecossistema Maven — fac
 
 ```bash
 curl -sSL https://raw.githubusercontent.com/usuario/repositorio/main/install.sh | bash
+```
