@@ -1,0 +1,45 @@
+name: Build and Release Native Binary
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build-native:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔄 Checkout do repositório
+        uses: actions/checkout@v3
+
+      - name: ☕️ Setup GraalVM Java 21
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '21'
+          distribution: 'graalvm'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🧰 Cache Maven
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: 🏗️ Build binário nativo com GraalVM
+        run: mvn clean package -Pnative
+
+      - name: 🔍 Verificar se o binário foi gerado
+        run: ls -lh target/
+
+      - name: 🚀 Criar release com binário
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            target/tree
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
